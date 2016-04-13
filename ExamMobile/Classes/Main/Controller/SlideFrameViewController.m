@@ -15,6 +15,8 @@
 #import "QuestionViewController.h"
 #import "FavQuestionViewController.h"
 #import "AboutViewController.h"
+
+#import "DetailVideoViewController.h"
 @interface SlideFrameViewController ()
 {
     //-------------------------
@@ -60,6 +62,9 @@
     UINavigationController *favExamNavVC;
     
     AboutViewController *aboutVC;
+    
+    DetailVideoViewController *detailVideoVC;
+    UINavigationController *detailVideoNavVC;
     
 }
 @end
@@ -155,6 +160,8 @@
     containerNavVC.topViewController.navigationItem.leftBarButtonItem=[[UIBarButtonItem alloc] initWithCustomView:showmenuBtn];
   
     
+    // 播放视频内容页
+    
     
     //播放记录
     favVideoVC=[[FavVideoViewController alloc] init];
@@ -173,7 +180,11 @@
     coursevideogorySortNavVC=[[UINavigationController alloc] initWithRootViewController:courseVideogorySortVC];
     [self addChildViewController:coursevideogorySortNavVC];
    
-    
+    //题库记录页
+    detailVideoVC = [[DetailVideoViewController alloc] init];
+    detailVideoVC.delegate = self;
+    detailVideoNavVC = [[UINavigationController  alloc] initWithRootViewController:detailVideoVC];
+    [self addChildViewController:detailVideoNavVC];
     
 }
 - (void)didReceiveMemoryWarning
@@ -293,8 +304,22 @@
 - (void)courseListViewController:(CourseListViewController *)listVCT selectedPostObject:(CoursesVideoObject *)postObj
 {
    // NSLog(@"-----%@",postObj.VideoPath);
-    lmjMoviePlayerViewController *playerVc = [[lmjMoviePlayerViewController alloc] initWithContentURL:[NSURL URLWithString:postObj.VideoPath]];
-    [self presentMoviePlayerViewControllerAnimated:playerVc] ;   //全拼播放
+    
+    
+    detailVideoVC.URLString  = postObj.VideoPath;
+    [detailVideoVC setupPlayer];
+    detailVideoVC.title = @"视频";
+    [detailVideoNavVC.view setFrame:CGRectMake(self.view.bounds.size.width, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+    [self switchShowViewContrller:detailVideoNavVC
+               fromViewController:currentVC
+                         duration:showTime
+                        showRight:NO];
+    //    detailVC.URLString = model.mp4_url;
+//    [self.navigationController pushViewController:detailVC animated:YES];
+    
+//    lmjMoviePlayerViewController *playerVc = [[lmjMoviePlayerViewController alloc] initWithContentURL:[NSURL URLWithString:postObj.VideoPath]];
+////    playerVc.moviePlayer.controlStyle = MPMovieControlStyle.None;
+//    [self presentMoviePlayerViewControllerAnimated:playerVc] ;   //全拼播放
     
 }
 #pragma postview delegate
@@ -353,7 +378,29 @@
     
 }
 
+#pragma detailVideoViewController delegate
+//从视频播放页返回
+- (void)detailVideoVideoControllerGoBack:(BOOL)changed
+{
+    
+    [self switchShowViewContrller:sideMenuVC
+               fromViewController:currentVC
+                         duration:showTime
+                        showRight:NO];
+    
+}
 
+#pragma mark FavVideoViewController delegate
+- (void)favPostView:(FavVideoViewController *)favPVC selectedPostObject:(CoursesVideoObject *)postObj {
+    detailVideoVC.URLString  = postObj.VideoPath;
+    [detailVideoVC setupPlayer];
+    detailVideoVC.title = @"视频";
+    [detailVideoNavVC.view setFrame:CGRectMake(self.view.bounds.size.width, 0, self.view.bounds.size.width, self.view.bounds.size.height)];
+    [self switchShowViewContrller:detailVideoNavVC
+               fromViewController:currentVC
+                         duration:showTime
+                        showRight:NO];
+}
 
 #pragma -
 #pragma 框架方法

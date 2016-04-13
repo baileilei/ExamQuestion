@@ -157,6 +157,7 @@
 {
     if (self.delegate&&[self.delegate respondsToSelector:@selector(courseListCancelFocus:)]) {
         [self.delegate courseListCancelFocus:self.tag];
+//        NSLog(@"123");
     }
 }
 

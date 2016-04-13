@@ -11,8 +11,10 @@
 #import "UIImage+MultiFormat.h"
 #import <CommonCrypto/CommonDigest.h>
 
+// 最大缓存时间 一周
 static const NSInteger kDefaultCacheMaxCacheAge = 60 * 60 * 24 * 7; // 1 week
 // PNG signature bytes and data (below)
+// PNG 签名字节和数据(PNG文件开始的8个字节是固定的)
 static unsigned char kPNGSignatureBytes[8] = {0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A};
 static NSData *kPNGSignatureData = nil;
 
@@ -48,7 +50,6 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     static id instance;
     dispatch_once(&once, ^{
         instance = [self new];
-        kPNGSignatureData = [NSData dataWithBytes:kPNGSignatureBytes length:8];
     });
     return instance;
 }
@@ -61,17 +62,24 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     if ((self = [super init])) {
         NSString *fullNamespace = [@"com.hackemist.SDWebImageCache." stringByAppendingString:ns];
 
+        // initialise PNG signature data
+        kPNGSignatureData = [NSData dataWithBytes:kPNGSignatureBytes length:8];
+
         // Create IO serial queue
+        // 磁盘读写队列，串行队列
         _ioQueue = dispatch_queue_create("com.hackemist.SDWebImageCache", DISPATCH_QUEUE_SERIAL);
 
         // Init default values
+        // 初始化默认数值，最大缓存时间一周
         _maxCacheAge = kDefaultCacheMaxCacheAge;
 
         // Init the memory cache
+        // 初始化内存缓存 NSCache
         _memCache = [[NSCache alloc] init];
         _memCache.name = fullNamespace;
 
         // Init the disk cache
+        // 初始化磁盘缓存（使用完整的命名空间名作为缓存文件目录名）
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         _diskCachePath = [paths[0] stringByAppendingPathComponent:fullNamespace];
 
@@ -81,16 +89,20 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
 
 #if TARGET_OS_IPHONE
         // Subscribe to app events
+        // 监听应用程序事件
+        // －接收到内存警告通知－清理内存操作 - clearMemory
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(clearMemory)
                                                      name:UIApplicationDidReceiveMemoryWarningNotification
                                                    object:nil];
 
+        // －应用程序将要终止通知－执行清理磁盘操作 - cleanDisk
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(cleanDisk)
                                                      name:UIApplicationWillTerminateNotification
                                                    object:nil];
 
+        // - 进入后台通知 － 后台清理磁盘 - backgroundCleanDisk
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(backgroundCleanDisk)
                                                      name:UIApplicationDidEnterBackgroundNotification
@@ -116,8 +128,6 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     }
 }
 
-#pragma mark SDImageCache (private)
-
 - (NSString *)cachePathForKey:(NSString *)key inPath:(NSString *)path {
     NSString *filename = [self cachedFileNameForKey:key];
     return [path stringByAppendingPathComponent:filename];
@@ -126,6 +136,8 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
 - (NSString *)defaultCachePathForKey:(NSString *)key {
     return [self cachePathForKey:key inPath:self.diskCachePath];
 }
+
+#pragma mark SDImageCache (private)
 
 - (NSString *)cachedFileNameForKey:(NSString *)key {
     const char *str = [key UTF8String];
@@ -147,7 +159,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
         return;
     }
 
-    [self.memCache setObject:image forKey:key cost:image.size.height * image.size.width * image.scale];
+    [self.memCache setObject:image forKey:key cost:image.size.height * image.size.width * image.scale * image.scale];
 
     if (toDisk) {
         dispatch_async(self.ioQueue, ^{
@@ -200,12 +212,26 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
 }
 
 - (BOOL)diskImageExistsWithKey:(NSString *)key {
-    __block BOOL exists = NO;
-    dispatch_sync(_ioQueue, ^{
-        exists = [_fileManager fileExistsAtPath:[self defaultCachePathForKey:key]];
-    });
-
+    BOOL exists = NO;
+    
+    // this is an exception to access the filemanager on another queue than ioQueue, but we are using the shared instance
+    // from apple docs on NSFileManager: The methods of the shared NSFileManager object can be called from multiple threads safely.
+    // 共享的 NSFileManager 对象可以保证在多线程运行时是安全的
+    // 检查文件是否存在
+    exists = [[NSFileManager defaultManager] fileExistsAtPath:[self defaultCachePathForKey:key]];
+    
     return exists;
+}
+
+- (void)diskImageExistsWithKey:(NSString *)key completion:(SDWebImageCheckCacheCompletionBlock)completionBlock {
+    dispatch_async(_ioQueue, ^{
+        BOOL exists = [_fileManager fileExistsAtPath:[self defaultCachePathForKey:key]];
+        if (completionBlock) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                completionBlock(exists);
+            });
+        }
+    });
 }
 
 - (UIImage *)imageFromMemoryCacheForKey:(NSString *)key {
@@ -222,7 +248,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     // Second check the disk cache...
     UIImage *diskImage = [self diskImageForKey:key];
     if (diskImage) {
-        CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale;
+        CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale * diskImage.scale;
         [self.memCache setObject:diskImage forKey:key cost:cost];
     }
 
@@ -264,10 +290,10 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     return SDScaledImageForKey(key, image);
 }
 
-- (NSOperation *)queryDiskCacheForKey:(NSString *)key done:(void (^)(UIImage *image, SDImageCacheType cacheType))doneBlock {
-    NSOperation *operation = [NSOperation new];
-
-    if (!doneBlock) return nil;
+- (NSOperation *)queryDiskCacheForKey:(NSString *)key done:(SDWebImageQueryCompletedBlock)doneBlock {
+    if (!doneBlock) {
+        return nil;
+    }
 
     if (!key) {
         doneBlock(nil, SDImageCacheTypeNone);
@@ -281,6 +307,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
         return nil;
     }
 
+    NSOperation *operation = [NSOperation new];
     dispatch_async(self.ioQueue, ^{
         if (operation.isCancelled) {
             return;
@@ -289,7 +316,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
         @autoreleasepool {
             UIImage *diskImage = [self diskImageForKey:key];
             if (diskImage) {
-                CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale;
+                CGFloat cost = diskImage.size.height * diskImage.size.width * diskImage.scale * diskImage.scale;
                 [self.memCache setObject:diskImage forKey:key cost:cost];
             }
 
@@ -303,21 +330,39 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
 }
 
 - (void)removeImageForKey:(NSString *)key {
-    [self removeImageForKey:key fromDisk:YES];
+    [self removeImageForKey:key withCompletion:nil];
+}
+
+- (void)removeImageForKey:(NSString *)key withCompletion:(SDWebImageNoParamsBlock)completion {
+    [self removeImageForKey:key fromDisk:YES withCompletion:completion];
 }
 
 - (void)removeImageForKey:(NSString *)key fromDisk:(BOOL)fromDisk {
+    [self removeImageForKey:key fromDisk:fromDisk withCompletion:nil];
+}
+
+- (void)removeImageForKey:(NSString *)key fromDisk:(BOOL)fromDisk withCompletion:(SDWebImageNoParamsBlock)completion {
+    
     if (key == nil) {
         return;
     }
-
+    
     [self.memCache removeObjectForKey:key];
-
+    
     if (fromDisk) {
         dispatch_async(self.ioQueue, ^{
             [_fileManager removeItemAtPath:[self defaultCachePathForKey:key] error:nil];
+            
+            if (completion) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    completion();
+                });
+            }
         });
+    } else if (completion){
+        completion();
     }
+    
 }
 
 - (void)setMaxMemoryCost:(NSUInteger)maxMemoryCost {
@@ -336,10 +381,12 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     [self clearDiskOnCompletion:nil];
 }
 
-- (void)clearDiskOnCompletion:(void (^)())completion
+- (void)clearDiskOnCompletion:(SDWebImageNoParamsBlock)completion
 {
     dispatch_async(self.ioQueue, ^{
+        // 删除缓存路径
         [_fileManager removeItemAtPath:self.diskCachePath error:nil];
+        // 再次创建缓存路径
         [_fileManager createDirectoryAtPath:self.diskCachePath
                 withIntermediateDirectories:YES
                                  attributes:nil
@@ -357,7 +404,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     [self cleanDiskWithCompletionBlock:nil];
 }
 
-- (void)cleanDiskWithCompletionBlock:(void (^)())completionBlock {
+- (void)cleanDiskWithCompletionBlock:(SDWebImageNoParamsBlock)completionBlock {
     dispatch_async(self.ioQueue, ^{
         NSURL *diskCacheURL = [NSURL fileURLWithPath:self.diskCachePath isDirectory:YES];
         NSArray *resourceKeys = @[NSURLIsDirectoryKey, NSURLContentModificationDateKey, NSURLTotalFileAllocatedSizeKey];
@@ -368,24 +415,29 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
                                                                       options:NSDirectoryEnumerationSkipsHiddenFiles
                                                                  errorHandler:NULL];
 
+        // 计算过期日期
         NSDate *expirationDate = [NSDate dateWithTimeIntervalSinceNow:-self.maxCacheAge];
         NSMutableDictionary *cacheFiles = [NSMutableDictionary dictionary];
         NSUInteger currentCacheSize = 0;
 
         // Enumerate all of the files in the cache directory.  This loop has two purposes:
+        // 遍历缓存路径中的所有文件，此循环要实现两个目的
         //
         //  1. Removing files that are older than the expiration date.
+        //     删除早于过期日期的文件
         //  2. Storing file attributes for the size-based cleanup pass.
+        //     保存文件属性以计算磁盘缓存占用空间
+        //
         NSMutableArray *urlsToDelete = [[NSMutableArray alloc] init];
         for (NSURL *fileURL in fileEnumerator) {
             NSDictionary *resourceValues = [fileURL resourceValuesForKeys:resourceKeys error:NULL];
 
-            // Skip directories.
+            // Skip directories. 跳过目录
             if ([resourceValues[NSURLIsDirectoryKey] boolValue]) {
                 continue;
             }
 
-            // Remove files that are older than the expiration date;
+            // Remove files that are older than the expiration date; 记录要删除的过期文件
             NSDate *modificationDate = resourceValues[NSURLContentModificationDateKey];
             if ([[modificationDate laterDate:expirationDate] isEqualToDate:expirationDate]) {
                 [urlsToDelete addObject:fileURL];
@@ -393,17 +445,20 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
             }
 
             // Store a reference to this file and account for its total size.
+            // 保存文件引用，以计算总大小
             NSNumber *totalAllocatedSize = resourceValues[NSURLTotalFileAllocatedSizeKey];
             currentCacheSize += [totalAllocatedSize unsignedIntegerValue];
             [cacheFiles setObject:resourceValues forKey:fileURL];
         }
         
+        // 删除过期的文件
         for (NSURL *fileURL in urlsToDelete) {
             [_fileManager removeItemAtURL:fileURL error:nil];
         }
 
         // If our remaining disk cache exceeds a configured maximum size, perform a second
         // size-based cleanup pass.  We delete the oldest files first.
+        // 如果剩余磁盘缓存空间超出最大限额，再次执行清理操作，删除最早的文件
         if (self.maxCacheSize > 0 && currentCacheSize > self.maxCacheSize) {
             // Target half of our maximum cache size for this cleanup pass.
             const NSUInteger desiredCacheSize = self.maxCacheSize / 2;
@@ -415,6 +470,7 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
                                                             }];
 
             // Delete files until we fall below our desired cache size.
+            // 循环依次删除文件，直到低于期望的缓存限额
             for (NSURL *fileURL in sortedFiles) {
                 if ([_fileManager removeItemAtURL:fileURL error:nil]) {
                     NSDictionary *resourceValues = cacheFiles[fileURL];
@@ -464,18 +520,16 @@ BOOL ImageDataHasPNGPreffix(NSData *data) {
     return size;
 }
 
-- (int)getDiskCount {
-    __block int count = 0;
+- (NSUInteger)getDiskCount {
+    __block NSUInteger count = 0;
     dispatch_sync(self.ioQueue, ^{
         NSDirectoryEnumerator *fileEnumerator = [_fileManager enumeratorAtPath:self.diskCachePath];
-        for (__unused NSString *fileName in fileEnumerator) {
-            count += 1;
-        }
+        count = [[fileEnumerator allObjects] count];
     });
     return count;
 }
 
-- (void)calculateSizeWithCompletionBlock:(void (^)(NSUInteger fileCount, NSUInteger totalSize))completionBlock {
+- (void)calculateSizeWithCompletionBlock:(SDWebImageCalculateSizeBlock)completionBlock {
     NSURL *diskCacheURL = [NSURL fileURLWithPath:self.diskCachePath isDirectory:YES];
 
     dispatch_async(self.ioQueue, ^{

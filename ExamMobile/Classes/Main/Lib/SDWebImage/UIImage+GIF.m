@@ -16,8 +16,10 @@
         return nil;
     }
 
+    // 创建图像源
     CGImageSourceRef source = CGImageSourceCreateWithData((__bridge CFDataRef)data, NULL);
 
+    // 获取图片帧数
     size_t count = CGImageSourceGetCount(source);
 
     UIImage *animatedImage;
@@ -30,11 +32,14 @@
 
         NSTimeInterval duration = 0.0f;
 
+        // 遍历并且提取所有的动画帧
         for (size_t i = 0; i < count; i++) {
             CGImageRef image = CGImageSourceCreateImageAtIndex(source, i, NULL);
 
-            duration += [self frameDurationAtIndex:i source:source];
+            // 累加动画时长
+            duration += [self sd_frameDurationAtIndex:i source:source];
 
+            // 将图像添加到动画数组
             [images addObject:[UIImage imageWithCGImage:image scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp]];
 
             CGImageRelease(image);
@@ -44,6 +49,7 @@
             duration = (1.0f / 10.0f) * count;
         }
 
+        // 建立可动画图像
         animatedImage = [UIImage animatedImageWithImages:images duration:duration];
     }
 
@@ -52,7 +58,7 @@
     return animatedImage;
 }
 
-+ (float)frameDurationAtIndex:(NSUInteger)index source:(CGImageSourceRef)source {
++ (float)sd_frameDurationAtIndex:(NSUInteger)index source:(CGImageSourceRef)source {
     float frameDuration = 0.1f;
     CFDictionaryRef cfFrameProperties = CGImageSourceCopyPropertiesAtIndex(source, index, nil);
     NSDictionary *frameProperties = (__bridge NSDictionary *)cfFrameProperties;

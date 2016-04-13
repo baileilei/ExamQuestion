@@ -22,6 +22,7 @@
 #import "QuestionViewController.h"
 #import "FavExamViewController.h"
 #import "FavQuestionViewController.h"
+#import "DetailVideoViewController.h"
 @interface SlideFrameViewController : UIViewController< QuestionListViewControllerDelegate,
                                                         QuestionViewControllerDelegate,
                                                         RESideMenuDelegate,
@@ -34,7 +35,9 @@
                                                         CourseListViewControllerDelegate,
                                                         CourseVideoViewControllerDelegate,
                                                         FavQuestionViewControllerDelegate,
-                                                        FavExamViewControllerDelegate>
+                                                        FavExamViewControllerDelegate
+                                                        ,DetailVideoViewControllerDelegate
+                                                        >
 @property(nonatomic,strong) UIPanGestureRecognizer *panGestureRecognizer;
 
 @end

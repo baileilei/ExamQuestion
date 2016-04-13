@@ -36,6 +36,7 @@
     for (NSDictionary *dic in json) {
         CoursesVideoObject *postObj=[[CoursesVideoObject alloc] initWithJson:dic];
         [objArr addObject:postObj];
+        
         // NSLog(@"%@");
         postObj=nil;
     }

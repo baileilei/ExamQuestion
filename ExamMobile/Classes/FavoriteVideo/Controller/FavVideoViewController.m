@@ -7,7 +7,7 @@
 //
 
 #import "FavVideoViewController.h"
-
+#import "CourseListViewController.h"
 #import "DBManager.h"
 #import "lmjMoviePlayerViewController.h"
 #import "CourseVideoCell.h"
@@ -166,16 +166,13 @@
         
     }
     //从普通页面到内容页面-------25号完善
-    CoursesVideoObject *postObj=[self.listData objectAtIndex:indexPath.row];
+    CoursesVideoObject *courseObj=[self.listData objectAtIndex:indexPath.row];
     
-    //播放视频
-    // NSLog(@"VideoPath----%@",postObj.VideoPath);
-
-    lmjMoviePlayerViewController *playerVc = [[lmjMoviePlayerViewController alloc] initWithContentURL:[NSURL URLWithString:postObj.VideoPath]];
     
-    //
-    [self presentMoviePlayerViewControllerAnimated:playerVc] ;   //全拼播放
-    
+    if (self.delegate && [self.delegate respondsToSelector:@selector(courseListViewController:selectedPostObject:)]) {
+        
+        [self.delegate favPostView:self  selectedPostObject:courseObj];
+    }
     
    
 }

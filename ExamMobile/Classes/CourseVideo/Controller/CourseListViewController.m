@@ -98,8 +98,6 @@
     //读取历史
     NSString *path=[k_DocumentsPath stringByAppendingPathComponent:[NSString stringWithFormat:@"/Course_cach_%d.txt",currentCategory.CourseID]];
     NSString *history=[Common readLocalString:path];
-    NSLog(@"history---%@",history);
-    NSLog(@"[history JSONValue]---%@",[history JSONValue]);
     if (history.length>0) {
         self.listData=[NSMutableArray arrayWithArray:[CoursesVideoObject initArrayWithJson:[history JSONValue]]];
         //获得所有分类数据

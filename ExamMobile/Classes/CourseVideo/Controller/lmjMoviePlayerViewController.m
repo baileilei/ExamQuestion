@@ -17,10 +17,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+//    MPMoviePlayerPlaybackDidFinishNotification
     // 移除程序进入后台的通知
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationDidEnterBackgroundNotification object:nil];
+    
+
 }
+
+
+
 
 #pragma mark - 实现这个方法来控制屏幕方向
 /**
@@ -31,5 +36,6 @@
 {
     return UIInterfaceOrientationMaskLandscape;
 }
+
 
 @end

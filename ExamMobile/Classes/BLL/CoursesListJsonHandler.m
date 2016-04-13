@@ -13,6 +13,7 @@
 @implementation CoursesListJsonHandler
 -(void)handlerCategoryObject:(CoursesObject *)catObj currentPageIndex:(int)currentPageIndex pageSize:(int)pageSize;
 {
+    NSLog(@"catObj---%d",catObj.CourseID);
     NSString *url=@"http://www.dota2ms.com/Service.asmx/CourseVideoSelect?CourseID={COURSEID}&CurrentPageIndex={PAGEINDEX}&PageSize={PAGESIZE}";
     url=[url stringByReplacingOccurrencesOfString:@"{COURSEID}" withString:[NSString stringWithFormat:@"%d",catObj.CourseID]];
     url=[url stringByReplacingOccurrencesOfString:@"{PAGEINDEX}" withString:[NSString stringWithFormat:@"%d",currentPageIndex]];
