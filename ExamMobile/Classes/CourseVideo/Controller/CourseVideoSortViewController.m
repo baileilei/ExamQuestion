@@ -95,13 +95,18 @@
     scrollView.frame = CGRectMake(0, lable.frame.origin.y+lable.frame.size.height+20, self.view.bounds.size.width, self.view.bounds.size.height);
     // frame中的size指UIScrollView的可视范围
     //    scrollView.backgroundColor = [UIColor redColor];
-    scrollView.contentSize =CGSizeMake(self.view.bounds.size.width, 20000);
+    
     // scrollView.contentInset = UIEdgeInsetsMake(0, 500, 200, 200);
     _scrollView = scrollView;
     [self.view addSubview:_scrollView];
-    //隐藏的分类
     
-    self.hideMenuView=[[DropSortMenuView alloc] initWithFrame:CGRectMake(0,lable.frame.size.height+20, self.view.bounds.size.width, 200)];
+    
+    
+    
+    //隐藏的分类
+    //隐藏的分类
+    self.hideMenuView=[[DropSortMenuView alloc] initWithFrame:CGRectMake(0, scrollView.frame.origin.y-lable.frame.origin.y-lable.frame.size.height-20, self.view.bounds.size.width, 200)];
+
     [self.hideMenuView setBackgroundColor:[UIColor clearColor]];
     self.hideMenuView.itemBtnBgColor=[UIColor whiteColor];
     self.hideMenuView.itemBtnDisEnableBgColor=[UIColor lightGrayColor];
@@ -118,7 +123,7 @@
     self.hideMenuView.itemArray=menus2;
     
     [self.hideMenuView initItemsWithCanSort:NO];
-    [self.view addSubview:self.hideMenuView];
+//    [self.view addSubview:self.hideMenuView];
     
     __weak CourseVideoSortViewController *weakself=self;
     
@@ -140,7 +145,7 @@
     [_scrollView addSubview:_hideMenuView];
     
     
-    
+    scrollView.contentSize =CGSizeMake(self.view.bounds.size.width,CGRectGetMaxY(_hideMenuView.frame) + 300);
     
     
 }

@@ -132,6 +132,12 @@
 		AE297E421BE4474700C780CD /* QuestionListViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AE297E411BE4474700C780CD /* QuestionListViewCell.m */; };
 		AE297E451BE4493800C780CD /* QuestionListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AE297E441BE4493800C780CD /* QuestionListViewController.m */; };
 		AE297E481BE46C6500C780CD /* QuestionListJsonHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = AE297E471BE46C6500C780CD /* QuestionListJsonHandler.m */; };
+		AED700951CC2DA0900F6777F /* DetailVideoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AED700941CC2DA0900F6777F /* DetailVideoViewController.m */; };
+		AED700A11CC2DA2200F6777F /* UIImage+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = AED700991CC2DA2200F6777F /* UIImage+Extension.m */; };
+		AED700A21CC2DA2200F6777F /* LMPlayer.bundle in Resources */ = {isa = PBXBuildFile; fileRef = AED7009A1CC2DA2200F6777F /* LMPlayer.bundle */; };
+		AED700A31CC2DA2200F6777F /* LMVideoAVPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = AED7009C1CC2DA2200F6777F /* LMVideoAVPlayerView.m */; };
+		AED700A41CC2DA2200F6777F /* LMVideoPlayerOperationView.m in Sources */ = {isa = PBXBuildFile; fileRef = AED7009E1CC2DA2200F6777F /* LMVideoPlayerOperationView.m */; };
+		AED700A51CC2DA2200F6777F /* LMVideoPlayerView.m in Sources */ = {isa = PBXBuildFile; fileRef = AED700A01CC2DA2200F6777F /* LMVideoPlayerView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -378,6 +384,17 @@
 		AE297E441BE4493800C780CD /* QuestionListViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuestionListViewController.m; sourceTree = "<group>"; };
 		AE297E461BE46C6500C780CD /* QuestionListJsonHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QuestionListJsonHandler.h; sourceTree = "<group>"; };
 		AE297E471BE46C6500C780CD /* QuestionListJsonHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QuestionListJsonHandler.m; sourceTree = "<group>"; };
+		AED700931CC2DA0900F6777F /* DetailVideoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DetailVideoViewController.h; sourceTree = "<group>"; };
+		AED700941CC2DA0900F6777F /* DetailVideoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DetailVideoViewController.m; sourceTree = "<group>"; };
+		AED700981CC2DA2200F6777F /* UIImage+Extension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+Extension.h"; sourceTree = "<group>"; };
+		AED700991CC2DA2200F6777F /* UIImage+Extension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+Extension.m"; sourceTree = "<group>"; };
+		AED7009A1CC2DA2200F6777F /* LMPlayer.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = LMPlayer.bundle; sourceTree = "<group>"; };
+		AED7009B1CC2DA2200F6777F /* LMVideoAVPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMVideoAVPlayerView.h; sourceTree = "<group>"; };
+		AED7009C1CC2DA2200F6777F /* LMVideoAVPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMVideoAVPlayerView.m; sourceTree = "<group>"; };
+		AED7009D1CC2DA2200F6777F /* LMVideoPlayerOperationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMVideoPlayerOperationView.h; sourceTree = "<group>"; };
+		AED7009E1CC2DA2200F6777F /* LMVideoPlayerOperationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMVideoPlayerOperationView.m; sourceTree = "<group>"; };
+		AED7009F1CC2DA2200F6777F /* LMVideoPlayerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LMVideoPlayerView.h; sourceTree = "<group>"; };
+		AED700A01CC2DA2200F6777F /* LMVideoPlayerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LMVideoPlayerView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -539,6 +556,8 @@
 		AE212C7D1BE43E6600AEB6CC /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				AED700931CC2DA0900F6777F /* DetailVideoViewController.h */,
+				AED700941CC2DA0900F6777F /* DetailVideoViewController.m */,
 				AE212DEC1BE4446000AEB6CC /* CourseListViewController.h */,
 				AE212DED1BE4446000AEB6CC /* CourseListViewController.m */,
 				AE212DEE1BE4446000AEB6CC /* CoursesVideoViewController.h */,
@@ -640,6 +659,7 @@
 		AE212C941BE43E6600AEB6CC /* Lib */ = {
 			isa = PBXGroup;
 			children = (
+				AED700961CC2DA2200F6777F /* LMVideoPlayer */,
 				AE212D641BE43F4A00AEB6CC /* JSONKit */,
 				AE212C951BE43E6600AEB6CC /* AFNetworking */,
 				AE212CA91BE43E6600AEB6CC /* CMPopTipView */,
@@ -1173,6 +1193,30 @@
 			path = BLL;
 			sourceTree = "<group>";
 		};
+		AED700961CC2DA2200F6777F /* LMVideoPlayer */ = {
+			isa = PBXGroup;
+			children = (
+				AED700971CC2DA2200F6777F /* Category */,
+				AED7009A1CC2DA2200F6777F /* LMPlayer.bundle */,
+				AED7009B1CC2DA2200F6777F /* LMVideoAVPlayerView.h */,
+				AED7009C1CC2DA2200F6777F /* LMVideoAVPlayerView.m */,
+				AED7009D1CC2DA2200F6777F /* LMVideoPlayerOperationView.h */,
+				AED7009E1CC2DA2200F6777F /* LMVideoPlayerOperationView.m */,
+				AED7009F1CC2DA2200F6777F /* LMVideoPlayerView.h */,
+				AED700A01CC2DA2200F6777F /* LMVideoPlayerView.m */,
+			);
+			path = LMVideoPlayer;
+			sourceTree = "<group>";
+		};
+		AED700971CC2DA2200F6777F /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				AED700981CC2DA2200F6777F /* UIImage+Extension.h */,
+				AED700991CC2DA2200F6777F /* UIImage+Extension.m */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1262,6 +1306,7 @@
 				AE212D7E1BE4446000AEB6CC /* version.txt in Resources */,
 				AE212D531BE43E6600AEB6CC /* icon_rightadd@2x.png in Resources */,
 				AE212D3C1BE43E6600AEB6CC /* MBProgressHUD.bundle in Resources */,
+				AED700A21CC2DA2200F6777F /* LMPlayer.bundle in Resources */,
 				AE212D2D1BE43E6600AEB6CC /* placeholder_active@2x.png in Resources */,
 				AE212C4D1BE434A200AEB6CC /* InfoPlist.strings in Resources */,
 			);
@@ -1330,9 +1375,11 @@
 				AE212D331BE43E6600AEB6CC /* SBJsonStreamParserAdapter.m in Sources */,
 				AE212D511BE43E6600AEB6CC /* UIImageView+HighlightedWebCache.m in Sources */,
 				AE212E201BE4446000AEB6CC /* DBManager.m in Sources */,
+				AED700A41CC2DA2200F6777F /* LMVideoPlayerOperationView.m in Sources */,
 				AE212D301BE43E6600AEB6CC /* SBJsonParser.m in Sources */,
 				AE297E421BE4474700C780CD /* QuestionListViewCell.m in Sources */,
 				AE212D951BE4446000AEB6CC /* SlideFrameViewController.m in Sources */,
+				AED700A51CC2DA2200F6777F /* LMVideoPlayerView.m in Sources */,
 				AE212D3E1BE43E6600AEB6CC /* MJRefreshBaseView.m in Sources */,
 				AE212D5C1BE43E6600AEB6CC /* HttpUtil.m in Sources */,
 				AE212E191BE4446000AEB6CC /* CourseVideoCell.m in Sources */,
@@ -1360,14 +1407,17 @@
 				AE212DCE1BE4446000AEB6CC /* QuestionViewController.m in Sources */,
 				AE212D491BE43E6600AEB6CC /* SDWebImageDownloader.m in Sources */,
 				AE212DC21BE4446000AEB6CC /* RefreshFooterView.m in Sources */,
+				AED700A31CC2DA2200F6777F /* LMVideoAVPlayerView.m in Sources */,
 				AE212D551BE43E6600AEB6CC /* SlideSwitchView.m in Sources */,
 				AE212DE51BE4446000AEB6CC /* OAuthLoginViewController.m in Sources */,
 				AE212D5A1BE43E6600AEB6CC /* AppDelegate.m in Sources */,
 				AE212D311BE43E6600AEB6CC /* SBJsonStreamParser.m in Sources */,
+				AED700951CC2DA0900F6777F /* DetailVideoViewController.m in Sources */,
 				AE212DCC1BE4446000AEB6CC /* IndexSlideViewController.m in Sources */,
 				AE212D4E1BE43E6600AEB6CC /* UIImage+GIF.m in Sources */,
 				AE212E151BE4446000AEB6CC /* FavQuestionViewController.m in Sources */,
 				AE212DF91BE4446000AEB6CC /* lmjMoviePlayerViewController.m in Sources */,
+				AED700A11CC2DA2200F6777F /* UIImage+Extension.m in Sources */,
 				AE212D371BE43E6600AEB6CC /* SBJsonStreamWriterState.m in Sources */,
 				AE212D461BE43E6600AEB6CC /* SDImageCache.m in Sources */,
 				AE212DB31BE4446000AEB6CC /* ProblemCategoryObject.m in Sources */,

@@ -96,7 +96,7 @@
     scrollView.frame = CGRectMake(0, lable.frame.origin.y+lable.frame.size.height+20, self.view.bounds.size.width, self.view.bounds.size.height);
     // frame中的size指UIScrollView的可视范围
     //    scrollView.backgroundColor = [UIColor redColor];
-    scrollView.contentSize =CGSizeMake(self.view.bounds.size.width, 20000);
+    
     // scrollView.contentInset = UIEdgeInsetsMake(0, 500, 200, 200);
     _scrollView = scrollView;
     [self.view addSubview:_scrollView];
@@ -122,7 +122,7 @@
     self.hideMenuView.itemArray=menus2;
     
     [self.hideMenuView initItemsWithCanSort:NO];
-    [self.view addSubview:self.hideMenuView];
+//    [self.view addSubview:self.hideMenuView];
     
     __weak CagtegorySortViewController *weakself=self;
     
@@ -142,11 +142,9 @@
     
     // [_scrollView addSubview:_sortMenuView];
     [_scrollView addSubview:_hideMenuView];
+    scrollView.contentSize =CGSizeMake(self.view.bounds.size.width,CGRectGetMaxY(_hideMenuView.frame) + 300);
     
-    
-    
-    
-    
+    NSLog(@"CGRectGetMaxY(_hideMenuView.frame)---%lf",CGRectGetMaxY(_hideMenuView.frame));
 }
 //uiscroll
 //告诉scrollview要缩放的是哪个子控件
@@ -218,6 +216,10 @@
     lable.frame=CGRectMake(0, self.sortMenuView.frame.origin.y+self.sortMenuView.frame.size.height+20, self.view.bounds.size.width, 40);
     _scrollView.frame = CGRectMake(0, lable.frame.origin.y+lable.frame.size.height+20, self.view.bounds.size.width, self.view.bounds.size.height);
     self.hideMenuView.frame=CGRectMake(0, _scrollView.frame.origin.y-lable.frame.origin.y-lable.frame.size.height-20, self.view.bounds.size.width, self.hideMenuView.frame.size.height);
+    
+    NSLog(@"self.hideMenuView.frame---%lf",self.hideMenuView.frame.origin.y);
+    NSLog(@"_scrollView.frame.origin.y2---%lf",_scrollView.frame.origin.y);
+    
    // scrollView.frame.origin.y-lable.frame.origin.y-lable.frame.size.height-20
 
 }
