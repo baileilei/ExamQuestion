@@ -16,7 +16,7 @@
 {
     //NSString *url=catObj.Name;
     self.PRKID = catObj.PRKID;
-    NSString *url = @"http://www.dota2ms.com/Service.asmx/ProblemPaperSelect?";
+    NSString *url = @"http://www.ltydkb.com/Service.asmx/ProblemPaperSelect?";
     NSString *k_initUrl3 =[url stringByAppendingFormat:@"PRKID=%d&CurrentPageIndex=%d&PageSize=%d",self.PRKID,currentPageIndex,pageSize];
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:k_initUrl3] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:20.0f];
     AFHTTPRequestOperation *operation =[[AFHTTPRequestOperation alloc] initWithRequest:request];
@@ -37,7 +37,7 @@
 - (void)searchListWithName:(int)prkID name:(NSString *)name searchPageIndex:(int)searchPageIndex pageSize:(int)pageSize{
     [SVProgressHUD showWithStatus:@"搜索数据..."];
     name=[name stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *url=@"http://www.dota2ms.com/Service.asmx/ProblemPaperSelect2?PRKID={PRKID}&Name={NAME}&CurrentPageIndex={PAGEINDEX}&PageSize={PAGESIZE}";
+    NSString *url=@"http://www.ltydkb.com/Service.asmx/ProblemPaperSelect2?PRKID={PRKID}&Name={NAME}&CurrentPageIndex={PAGEINDEX}&PageSize={PAGESIZE}";
     url=[url stringByReplacingOccurrencesOfString:@"{PRKID}" withString:[NSString stringWithFormat:@"%d",prkID]];
     url=[url stringByReplacingOccurrencesOfString:@"{NAME}" withString:name];
     url=[url stringByReplacingOccurrencesOfString:@"{PAGEINDEX}" withString:[NSString stringWithFormat:@"%d",searchPageIndex]];

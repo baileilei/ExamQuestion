@@ -14,7 +14,7 @@
 - (void)handlerVideoObject:(CoursesVideoObject *)cvObj currentPageIndex:(int)currentPageIndex pageSize:(int)pageSize
 {
     //NSLog(@"handlerVideoObject--");
-    NSString *url=@"http://www.dota2ms.com/Service.asmx/AllCourseVideoSelect?CurrentPageIndex={PAGEINDEX}&PageSize={PAGESIZE}";
+    NSString *url=@"http://www.ltydkb.com/Service.asmx/AllCourseVideoSelect?CurrentPageIndex={PAGEINDEX}&PageSize={PAGESIZE}";
     url=[url stringByReplacingOccurrencesOfString:@"{PAGEINDEX}" withString:[NSString stringWithFormat:@"%d",currentPageIndex]];
     url=[url stringByReplacingOccurrencesOfString:@"{PAGESIZE}" withString:[NSString stringWithFormat:@"%d",pageSize]];
     NSURLRequest *request=[NSURLRequest requestWithURL:[NSURL URLWithString:url]];
@@ -36,7 +36,7 @@
 {
     [SVProgressHUD showWithStatus:@"搜索数据..."];
     VideoName=[VideoName stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *url=@"http://www.dota2ms.com/Service.asmx/ConditionCourseVideoSelect?VideoName={VIDEONAME}&CurrentPageIndex={PAGEINDEX}&PageSize={PAGESIZE}";
+    NSString *url=@"http://www.ltydkb.com/Service.asmx/ConditionCourseVideoSelect?VideoName={VIDEONAME}&CurrentPageIndex={PAGEINDEX}&PageSize={PAGESIZE}";
     url=[url stringByReplacingOccurrencesOfString:@"{VIDEONAME}" withString:VideoName];
     url=[url stringByReplacingOccurrencesOfString:@"{PAGEINDEX}" withString:[NSString stringWithFormat:@"%d",searchPageIndex]];
     url=[url stringByReplacingOccurrencesOfString:@"{PAGESIZE}" withString:[NSString stringWithFormat:@"%d",pageSize]];

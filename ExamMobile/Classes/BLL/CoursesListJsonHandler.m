@@ -14,7 +14,7 @@
 -(void)handlerCategoryObject:(CoursesObject *)catObj currentPageIndex:(int)currentPageIndex pageSize:(int)pageSize;
 {
     NSLog(@"catObj---%d",catObj.CourseID);
-    NSString *url=@"http://www.dota2ms.com/Service.asmx/CourseVideoSelect?CourseID={COURSEID}&CurrentPageIndex={PAGEINDEX}&PageSize={PAGESIZE}";
+    NSString *url=@"http://www.ltydkb.com/Service.asmx/CourseVideoSelect?CourseID={COURSEID}&CurrentPageIndex={PAGEINDEX}&PageSize={PAGESIZE}";
     url=[url stringByReplacingOccurrencesOfString:@"{COURSEID}" withString:[NSString stringWithFormat:@"%d",catObj.CourseID]];
     url=[url stringByReplacingOccurrencesOfString:@"{PAGEINDEX}" withString:[NSString stringWithFormat:@"%d",currentPageIndex]];
     url=[url stringByReplacingOccurrencesOfString:@"{PAGESIZE}" withString:[NSString stringWithFormat:@"%d",pageSize]];
@@ -39,7 +39,7 @@
 {
     [SVProgressHUD showWithStatus:@"搜索数据..."];
     videoName=[videoName stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding];
-    NSString *url=@"http://www.dota2ms.com/Service.asmx/ConditionCourseVideoSelect?CourseID={COURSEID}&VideoName={VIDEONAME}&CurrentPageIndex={PAGEINDEX}&PageSize={PAGESIZE}";
+    NSString *url=@"http://www.ltydkb.com/Service.asmx/ConditionCourseVideoSelect?CourseID={COURSEID}&VideoName={VIDEONAME}&CurrentPageIndex={PAGEINDEX}&PageSize={PAGESIZE}";
     url=[url stringByReplacingOccurrencesOfString:@"{COURSEID}" withString:[NSString stringWithFormat:@"%d",courseID]];
     url=[url stringByReplacingOccurrencesOfString:@"{VIDEONAME}" withString:videoName];
     url=[url stringByReplacingOccurrencesOfString:@"{PAGEINDEX}" withString:[NSString stringWithFormat:@"%d",searchPageIndex]];

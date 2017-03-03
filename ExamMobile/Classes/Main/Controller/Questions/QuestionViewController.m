@@ -277,7 +277,7 @@
 //    //完成按钮
 //    [self setComment];
     
-    NSString *url=@"http://www.dota2ms.com/Service.asmx/SelectProblemsLib?PPID={PPID}";
+    NSString *url=@"http://www.ltydkb.com/Service.asmx/SelectProblemsLib?PPID={PPID}";
     url=[url stringByReplacingOccurrencesOfString:@"{PPID}" withString:[NSString stringWithFormat:@"%@",ppoObj.PpID]];
    
     NSURLRequest *request = [NSURLRequest requestWithURL:[NSURL URLWithString:url] cachePolicy:NSURLRequestReloadIgnoringLocalCacheData timeoutInterval:20.0f];

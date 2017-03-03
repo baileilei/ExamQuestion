@@ -8,7 +8,7 @@
 
 #ifndef ExamMobile_Public_h
 #define ExamMobile_Public_h
-#define URL_SERVER (@"http://www.dota2ms.com/Service.asmx/")
+#define URL_SERVER (@"http://www.ltydkb.com/Service.asmx/")
 
 #define STATE_FAIL 0
 #define STATE_SUCCESS 1

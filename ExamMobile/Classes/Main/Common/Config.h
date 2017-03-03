@@ -17,20 +17,20 @@
 //应用初始化启动图片
 #define k_defaultLoadingImage @"Default-568h@2x.png"
 //应用初始化网址ddd
-#define initUrl2(x)    [NSString stringWithFormat:@"http://www.dota2ms.com/%@",(x)]
+#define initUrl2(x)    [NSString stringWithFormat:@"http://www.ltydkb.com/%@",(x)]
 
 #define initUrlWeb(x)    [NSString stringWithFormat:@"http://qxw1098930026.my3w.com/%@",(x)]
 
 //应用初始化网址2
-#define k_initUrlBasicCourse @"http://www.dota2ms.com/Service.asmx/RootNodeSelect"
+#define k_initUrlBasicCourse @"http://www.ltydkb.com/Service.asmx/RootNodeSelect"
 
 
 
 //应用初始化网址4
-#define k_initUrlCategoryCourse @"http://www.dota2ms.com/Service.asmx/ProblemResourceKindSelect"
+#define k_initUrlCategoryCourse @"http://www.ltydkb.com/Service.asmx/ProblemResourceKindSelect"
 
 //应用初始化网址5
-#define k_initUrlVideo @"http://www.dota2ms.com/Service.asmx/CourseAllSelectSelect"
+#define k_initUrlVideo @"http://www.ltydkb.com/Service.asmx/CourseAllSelectSelect"
 
 
 
